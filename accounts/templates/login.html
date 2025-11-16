@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-container h2 {
+        text-align: center;
+        color: #0096c7;
+        margin-bottom: 20px;
+    }
+
+    form table {
+        width: 100%;
+    }
+
+    form table td {
+        padding: 10px 0;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #0096c7;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0077a4;
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .login-footer a {
+        color: #0096c7;
+        text-decoration: none;
+    }
+
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="login-container">
+    <h2>Entrar no Sistema</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ login_form.as_table }}
+        </table>
+        <input type="submit" value="Entrar">
+    </form>
+
+    <div class="login-footer">
+        <p>Não tem uma conta? <a href="{% url 'register' %}">Cadastre-se</a></p>
+    </div>
+</div>
+{% endblock content %}

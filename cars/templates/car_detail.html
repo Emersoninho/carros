@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ object.model }} - Detalhes{% endblock title %}
+
+{% block content %}
+<div class="car-detail-container">
+    <div class="car-detail-card">
+        {% if object.photo %}
+            <img src="{{ object.photo.url }}" alt="{{ object.model }} - {{ object.brand }}" class="car-detail-image">
+        {% else %}
+            <img src="{% static 'img/sem_foto.jpg' %}" alt="Sem foto" class="car-detail-image">
+        {% endif %}
+
+        <div class="car-detail-info">
+            <h2>{{ object.brand }} {{ object.model }}</h2>
+            <p><strong>Marca:</strong> {{ object.brand.name }}</p>
+            <p><strong>Ano de Fabricação:</strong> {{ object.factory_year|default:"Não informado" }}</p>
+            <p><strong>Ano do Modelo:</strong> {{ object.model_year|default:"Não informado" }}</p>
+            <p><strong>Placa:</strong> {{ object.plate|default:"Não informada" }}</p>
+            <p><strong>Valor:</strong> 
+            {% if object.value %}
+                R$ {{ object.value|floatformat:2 }}
+            {% else %}
+                Não informado
+            {% endif %}
+            </p>
+            {% if object.bio %}
+                <p><strong>Descrição:</strong> {{ object.bio }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+        <div class="car-detail-actions">
+            <a href="{% url 'cars_list' %}" class="btn-back">⬅️ Voltar</a>
+            <a href="{% url 'car_update' object.id %}" class="btn-edit">✏️ Editar</a>
+            <a href="{% url 'car_delete' object.id %}" class="btn-delete">🗑️ Excluir</a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.car-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #f8f9fa;
+}
+
+.car-detail-card {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 850px;
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.car-detail-card:hover {
+    transform: translateY(-5px);
+}
+
+.car-detail-image {
+    width: 50%;
+    object-fit: cover;
+    height: 350px;
+    background-color: #eee;
+}
+
+.car-detail-info {
+    padding: 25px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.car-detail-info h2 {
+    color: #0077b6;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.car-detail-info p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.car-detail-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-back, .btn-edit {
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-back {
+    background-color: #adb5bd;
+    color: #fff;
+}
+
+.btn-back:hover {
+    background-color: #868e96;
+}
+
+.btn-edit {
+    background-color: #0096c7;
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #00b4d8;
+}
+
+/* Botão Excluir */
+.btn-delete {
+    text-decoration: none;
+    background-color: #d90429;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+.btn-delete:hover {
+    background-color: #a4161a;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .car-detail-card {
+        flex-direction: column;
+    }
+    .car-detail-image, .car-detail-info {
+        width: 100%;
+    }
+}
+</style>
+{% endblock content %}

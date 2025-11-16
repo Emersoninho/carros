@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cadastrar Carro{% endblock title %}
+
+{% block content %}
+<h1 class="form-title">Cadastrar Novo Carro</h1>
+
+<form method="POST" enctype="multipart/form-data" class="car-form">
+    {% csrf_token %}
+    <div class="form-fields">
+        {{ form.as_p }}
+    </div>
+    <button type="submit" class="btn-submit">Cadastrar</button>
+</form>
+
+<style>
+.form-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+/* Container geral */
+.car-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Campos */
+.car-form label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.car-form input[type="text"],
+.car-form input[type="number"],
+.car-form input[type="file"],
+.car-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.car-form input:focus,
+.car-form select:focus {
+    border-color: #0096c7;
+    outline: none;
+}
+
+/* Botão */
+.btn-submit {
+    background-color: #0096c7;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #00b4d8;
+    transform: scale(1.03);
+}
+</style>
+{% endblock content %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar Carro{% endblock title %}
+
+{% block content %}
+<div class="edit-container">
+    <h2><i class="bi bi-pencil-square"></i> Editar Carro</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="edit-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="form-buttons">
+            <button type="submit" class="btn-save">
+                <i class="bi bi-check-circle"></i> Salvar Alterações
+            </button>
+            <button type="submit" class="btn-delete">
+                <i class="bi bi-trash"></i> Excluir
+            </button>
+            <a href="{% url 'cars_list' %}" class="btn-cancel">
+                <i class="bi bi-arrow-left"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+.edit-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 40px;
+}
+
+.edit-container h2 {
+    text-align: center;
+    color: #0077b6;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.edit-form p {
+    margin-bottom: 20px;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="number"],
+.edit-form input[type="file"],
+.edit-form select,
+.edit-form textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+}
+
+.edit-form input:focus,
+.edit-form select:focus,
+.edit-form textarea:focus {
+    border-color: #0096c7;
+    background-color: #fff;
+    outline: none;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-save {
+    background-color: #0096c7;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btn-save:hover {
+    background-color: #00b4d8;
+}
+
+.btn-delete {
+    background-color: #d90429;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #a4161a;
+}
+
+.btn-cancel {
+    background-color: #ccc;
+    color: #333;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: #adb5bd;
+}
+</style>
+{% endblock content %}

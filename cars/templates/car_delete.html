@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Excluir {{ object.model }}{% endblock title %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="delete-card">
+        <h2>Tem certeza que deseja excluir o carro <strong>{{ object.model }}?</strong></h2>
+
+        <div class="car-preview">
+            {% if object.photo %}
+                <img src="{{ object.photo.url }}" alt="{{ object.model }}">
+            {% endif %}
+            <div class="car-info">
+                <p><strong>Modelo:</strong> {{ object.model }}</p>
+                <p><strong>Marca:</strong> {{ object.brand.name }}</p>
+                <p><strong>Ano:</strong> {{ object.factory_year }}</p>
+                <p><strong>Placa:</strong> {{ object.plate }}</p>
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="buttons">
+                <button type="submit" class="btn-delete">
+                    <i class="bi bi-trash"></i> Excluir
+                </button>
+                <a href="{% url 'car_update' pk=object.pk  %}" class="btn-cancel">
+                    <i class="bi bi-arrow-left-circle"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.delete-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.delete-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+.delete-card h2 {
+    color: #d90429;
+    margin-bottom: 25px;
+}
+
+.car-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.car-preview img {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.car-info {
+    text-align: left;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-delete {
+    background-color: #d90429;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #a4161a;
+}
+
+.btn-cancel {
+    text-decoration: none;
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: #495057;
+}
+</style>
+{% endblock content %}
