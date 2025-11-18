@@ -80,6 +80,12 @@ class CarDetailView(DetailView):
     model = Car
     template_name = 'car_detail.html'
 
+    # 🚨 ADICIONE ESTE MÉTODO
+    def form_valid(self, form):
+        # Antes de salvar o formulário, atribui o usuário logado como 'owner'
+        form.instance.owner = self.request.user 
+        return super().form_valid(form)
+
 @method_decorator(login_required(login_url='login'), name='dispatch') #decorator, login 
 class CarUpdateView(UpdateView):
     model = Car
@@ -94,3 +100,15 @@ class CarDeleteView(DeleteView):
     model = Car
     template_name = 'car_delete.html'
     success_url = reverse_lazy('cars_list')
+
+    # 🚨 Lógica de Autorização Adicionada
+    def get_queryset(self):
+        # Chama a queryset base (todos os carros)
+        queryset = super().get_queryset()
+
+        # Permite que o superusuário veja todos os carros
+        if self.request.user.is_superuser:
+            return queryset
+        
+        # Para usuários normais, filtra para mostrar SÓ os carros que eles criaram (se o campo for 'owner')
+        return queryset.filter(owner=self.request.user)
