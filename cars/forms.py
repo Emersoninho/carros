@@ -27,7 +27,7 @@ from cars.models import Brand, Car
 class CarModelForm(forms.ModelForm):
     class Meta:
         model = Car
-        fields = '__all__'
+        fields = ['model', 'brand', 'factory_year', 'model_year', 'plate', 'value', 'photo', 'bio']
 
     def clean_value(self):
         value = self.cleaned_data.get('value')

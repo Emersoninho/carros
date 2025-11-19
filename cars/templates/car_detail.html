@@ -28,6 +28,15 @@
             {% if object.bio %}
                 <p><strong>Descrição:</strong> {{ object.bio }}</p>
             {% endif %}
+            <p><strong>Proprietário:</strong> 
+                {% if object.owner %}
+                    {{ object.owner.username }}
+                {% else %}
+                    Não informado
+                {% endif %}
+            </p>
+
+
         </div>
     </div>
     {% if user.is_authenticated %}

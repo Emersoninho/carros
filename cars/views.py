@@ -6,6 +6,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required # login
 from django.utils.decorators import method_decorator # decorador
+from django.contrib import messages
 
 # baseada em função
 # def cars_view(request):
@@ -76,24 +77,42 @@ class NewCarCreateView(CreateView):
     template_name = 'new_car.html'
     success_url = reverse_lazy('cars_list')
 
+    def form_valid(self, form):
+        # Salva o dono corretamente
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+
 class CarDetailView(DetailView):
     model = Car
     template_name = 'car_detail.html'
 
-    # 🚨 ADICIONE ESTE MÉTODO
-    def form_valid(self, form):
-        # Antes de salvar o formulário, atribui o usuário logado como 'owner'
-        form.instance.owner = self.request.user 
-        return super().form_valid(form)
-
-@method_decorator(login_required(login_url='login'), name='dispatch') #decorator, login 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class CarUpdateView(UpdateView):
     model = Car
     form_class = CarModelForm
     template_name = 'car_update.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        # Se NÃO for superusuário e NÃO for o dono → bloquear
+        if not request.user.is_superuser and obj.owner != request.user:
+            messages.error(request, "❌ Você não tem permissão para editar este carro.")
+            return redirect('cars_list')
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+    # Garante que o proprietário nunca é alterado
+        form.instance.owner = self.get_object().owner
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse_lazy('car_detail', kwargs={'pk': self.object.pk})
+
+    
+
 
 @method_decorator(login_required(login_url='login'), name='dispatch') #decorator, login 
 class CarDeleteView(DeleteView):
@@ -102,13 +121,23 @@ class CarDeleteView(DeleteView):
     success_url = reverse_lazy('cars_list')
 
     # 🚨 Lógica de Autorização Adicionada
-    def get_queryset(self):
-        # Chama a queryset base (todos os carros)
-        queryset = super().get_queryset()
+    # def get_queryset(self):
+    #     # Chama a queryset base (todos os carros)
+    #     queryset = super().get_queryset()
 
-        # Permite que o superusuário veja todos os carros
-        if self.request.user.is_superuser:
-            return queryset
+    #     # Permite que o superusuário veja todos os carros
+    #     if self.request.user.is_superuser:
+    #         return queryset
         
-        # Para usuários normais, filtra para mostrar SÓ os carros que eles criaram (se o campo for 'owner')
-        return queryset.filter(owner=self.request.user)
+    #     # Para usuários normais, filtra para mostrar SÓ os carros que eles criaram (se o campo for 'owner')
+    #     return queryset.filter(owner=self.request.user)
+    
+    # 🚨 Bloqueia usuários que tentam excluir carro que não é deles
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        if (not request.user.is_superuser) and (obj.owner != request.user):
+            messages.error(request, "❌ Você não tem permissão para excluir este carro.")
+            return redirect('cars_list')
+
+        return super().dispatch(request, *args, **kwargs)

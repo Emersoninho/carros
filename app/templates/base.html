@@ -108,9 +108,47 @@
 </nav>
 
 <main>
+    <main>
+
+    {% if messages %}
+    <div style="max-width: 600px; margin: 0 auto; margin-bottom: 25px;">
+        {% for message in messages %}
+            <div 
+                style="
+                    background-color: 
+                        {% if message.tags == 'success' %}#d1f7d6
+                        {% elif message.tags == 'error' %}#ffd6d6
+                        {% elif message.tags == 'warning' %}#fff5cc
+                        {% else %}#d7ecff{% endif %};
+                    color: #333;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+                    font-size: 1rem;
+                "
+            >
+                <i class="bi 
+                    {% if message.tags == 'success' %}bi-check-circle-fill
+                    {% elif message.tags == 'error' %}bi-x-circle-fill
+                    {% elif message.tags == 'warning' %}bi-exclamation-triangle-fill
+                    {% else %}bi-info-circle-fill{% endif %}
+                " style="font-size: 1.5rem;"></i>
+
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {% block content %}
     {% endblock content %}
 </main>
+
+</main>
+
 
 <footer>
     <p>Desenvolvido por <strong>Emerson</strong> © {{ now|date:"Y" }}</p>

@@ -12,7 +12,7 @@ def register_view(request):
             return redirect('login')
     else:    
         user_form = UserCreationForm()
-        return render(request, 'register.html', {'user_form': user_form})
+    return render(request, 'register.html', {'user_form': user_form})
     
 def login_view(request):
     if request.method == 'POST':
